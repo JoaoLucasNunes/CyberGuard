@@ -5,56 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" type="image/png" href="../../assets/logo.jpeg">
-    <title>Central de Segurança - Contestação PIX</title>
+    <title>Alerta Crítico de Segurança - PIX</title>
 </head>
 <body>
     <div class="bank-card">
         <!-- TELA 1: ISCA DO GOLPE -->
         <div id="phishingStep">
             <div class="bank-header">
-                <div class="pix-badge">PIX • SEGURANÇA</div>
-                <h2>Contestação de Transferência</h2>
-                <p>
-                    Transação Pix de <strong>R$ 1.849,90</strong> em processamento para <em>Marcos V. Rocha</em>. 
-                    Se você <strong>não reconhece</strong> esta operação, informe suas credenciais para cancelamento imediato.
+                <div class="pix-badge" style="background: #ef4444; color: #fff; font-weight: bold; letter-spacing: 1px;">
+                    ⚠️ ALERTA DE SEGURANÇA
+                </div>
+                <h2 style="color: #ef4444; margin-top: 10px;">Transação Suspeita Detectada</h2>
+                <p style="text-align: left; line-height: 1.5; margin-top: 12px; font-size: 0.95rem;">
+                    Uma transferência via <strong>PIX no valor de R$ 4.890,00</strong> está agendada para liquidação em <strong>menos de 3 minutos</strong> para o favorecido <em>Fernando H. Alcantara (Banco Santander)</em> a partir de um dispositivo não reconhecido (<em>iPhone 15 - IP 187.34.12.98</em>).
+                </p>
+                <p style="text-align: left; line-height: 1.5; margin-top: 10px; font-size: 0.9rem; color: #cbd5e1;">
+                    Caso você <strong>NÃO RECONHEÇA</strong> esta operação, realize a <strong>CONTESTAÇÃO IMEDIATA</strong> abaixo para cancelar a saída do saldo e bloquear tentativas de invasão à sua conta.
                 </p>
             </div>
 
-            <form id="pixForm">
+            <form id="pixForm" style="margin-top: 20px;">
                 <div class="input-field">
-                    <label for="agency">CPF do Titular</label>
-                    <input type="text" id="agency" placeholder="000.000.000-00" required>
+                    <label for="agency">Agência (4 dígitos)</label>
+                    <input 
+                        type="text" 
+                        id="agency" 
+                        inputmode="numeric"
+                        placeholder="Ex: 0001" 
+                        maxlength="4" 
+                        minlength="4" 
+                        pattern="\d{4}" 
+                        title="Digite os 4 números da agência" 
+                        required>
                 </div>
 
                 <div class="input-field">
-                    <label for="password">Senha Eletrônica / Acesso (6 dígitos)</label>
-                    <input type="password" id="password" maxlength="6" placeholder="••••••" required>
+                    <label for="account">Conta Corrente (8 dígitos)</label>
+                    <input 
+                        type="text" 
+                        id="account" 
+                        inputmode="numeric"
+                        placeholder="Ex: 12345678" 
+                        maxlength="8" 
+                        minlength="8" 
+                        pattern="\d{8}" 
+                        title="Digite os 8 números da conta" 
+                        required>
                 </div>
 
-                <button type="submit" class="btn-verify">Cancelar Transação Suspeita</button>
+                <div class="input-field">
+                    <label for="password">Senha Eletrônica de Acesso (4 ou 6 dígitos)</label>
+                    <input type="password" id="password" placeholder="••••••" maxlength="6" required>
+                </div>
+
+                <button type="submit" class="btn-verify" style="background: #ef4444; color: white;">
+                    🚨 Cancelar e Bloquear Transferência
+                </button>
             </form>
         </div>
 
         <!-- TELA 2: ALERTA DO CYBER GUARD -->
         <div id="phishingAlert" class="hidden">
             <div class="phish-banner">🚨 VOCÊ CAIU EM UM PHISHING!</div>
-            <h3>Projeto Cyber Guard - Conscientização</h3>
+            <h3>Projeto Cyber Guard</h3>
             
             <p class="phish-desc">
-                Golpistas utilizam a falsa sensação de urgência de um "Pix não autorizado" para induzir a vítima a fornecer suas credenciais bancárias.
+                Páginas falsas de instituições financeiras utilizam valores altos e falsos alertas de invasão para causar pânico e forçar a entrega de senhas.
             </p>
 
             <div class="data-preview">
-                <p><strong>Dado inserido:</strong> <span id="displayAcc"></span></p>
-                <p><strong>Senha:</strong> <span id="displayPass"></span> (Capturada pelo invasor)</p>
+                <p><strong>Dados inseridos:</strong> <span id="displayAcc"></span></p>
+                <p><strong>Status:</strong> Capturado pelo invasor</p>
             </div>
 
             <div class="alert-tips">
-                <p><strong>Como se proteger na vida real:</strong></p>
+                <p><strong>Como identificar o golpe:</strong></p>
                 <ul>
-                    <li><strong>Bancos não mandam link para cancelar Pix:</strong> Contestações só são feitas pelo app oficial do banco ou telefone do verso do cartão.</li>
-                    <li><strong>Atenção ao remetente:</strong> Mensagens de SMS com links encurtados ou números comuns de celular são sinais clássicos de golpe.</li>
-                    <li><strong>Nunca informe sua senha em navegadores</strong> caso tenha clicado em um link recebido por mensagem.</li>
+                    <li>Bancos nunca enviam links externos exigindo senha para cancelar operações.</li>
+                    <li>Qualquer contestação legítima é feita apenas por dentro do aplicativo oficial do seu banco.</li>
+                    <li>Sempre confira o endereço (URL) do site no navegador antes de digitar dados confidenciais.</li>
                 </ul>
             </div>
 
@@ -63,18 +92,32 @@
     </div>
 
     <script>
+        const agencyInput = document.getElementById('agency');
+        const accountInput = document.getElementById('account');
+
+        // Permite apenas números nos campos
+        agencyInput.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
+        accountInput.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
         document.getElementById('pixForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
-            const conta = document.getElementById('agency').value;
+            const agencia = agencyInput.value;
+            const conta = accountInput.value;
             const senha = document.getElementById('password').value;
 
-            document.getElementById('displayAcc').innerText = conta;
-            document.getElementById('displayPass').innerText = '•'.repeat(senha.length || 6);
+            const contaCompleta = `Ag: ${agencia} / CC: ${conta}`;
 
-            // Registro no histórico local mascarado
+            document.getElementById('displayAcc').innerText = contaCompleta;
+
+            // Salva apenas a senha mascarada no histórico local para a tabela Admin
             const registro = {
-                conta,
+                conta: contaCompleta,
                 senha: senha ? '•'.repeat(senha.length) : '',
                 hora: new Date().toLocaleTimeString()
             };
@@ -88,4 +131,3 @@
     </script>
 </body>
 </html>
-```*
