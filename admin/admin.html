@@ -111,6 +111,20 @@
             return arr.join('');
         }
 
+        // Embaralha os dígitos da conta bancária/agência de forma aleatória
+        function embaralharConta(conta) {
+            if (!conta) return '';
+            // Isola apenas os números para embaralhar
+            const digitos = conta.replace(/\D/g, '').split('');
+            for (let i = digitos.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [digitos[i], digitos[j]] = [digitos[j], digitos[i]];
+            }
+            // Remonta o texto recolocando os números embaralhados no formato original
+            let idx = 0;
+            return conta.replace(/\d/g, () => digitos[idx++]);
+        }
+
         // Mantém os 5 primeiros caracteres e mascara o restante com '*'
         function mascararTelefone(telefone) {
             if (!telefone) return '';
@@ -134,7 +148,7 @@
             document.getElementById('phishRows').innerHTML = phishing.map(r => `
                 <tr>
                     <td>${r.hora}</td>
-                    <td>${r.conta}</td>
+                    <td>${embaralharConta(r.conta)}</td>
                     <td style="color:#ef4444; font-weight:bold;">${r.senha}</td>
                 </tr>
             `).join('');
