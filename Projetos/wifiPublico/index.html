@@ -24,13 +24,13 @@
                 </div>
 
                 <div class="field-group">
-                    <label for="cpf">CPF</label>
-                    <input type="text" id="cpf" placeholder="000.000.000-00" required>
+                    <label for="cpf">CPF (apenas números)</label>
+                    <input type="tel" id="cpf" placeholder="00000000000" required maxlength="11" pattern="\d{11}">
                 </div>
 
                 <div class="field-group">
-                    <label for="phone">Telefone / WhatsApp</label>
-                    <input type="tel" id="phone" placeholder="(92) 99999-9999" required>
+                    <label for="phone">Telefone / WhatsApp (cód. país + DDD)</label>
+                    <input type="tel" id="phone" placeholder="5592999999999" required maxlength="13">
                 </div>
 
                 <div class="checkbox-group">
@@ -67,23 +67,72 @@
     </div>
 
     <script>
+        // --- Funções de Segurança e Privacidade ---
+
+        /** Embaralha os caracteres de uma string. Ex: '123' -> '312' */
+        function shuffleString(str) {
+            const arr = str.split('');
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr.join('');
+        }
+
+        /** Abrevia o nome para o primeiro nome e a inicial do último. Ex: 'Maria Silva' -> 'Maria S.' */
+        function abbreviateName(fullName) {
+            if (!fullName || fullName.trim() === '') return '';
+            const names = fullName.trim().split(/\s+/);
+            if (names.length <= 1) return names[0];
+            const lastNameInitial = names[names.length - 1].charAt(0);
+            return `${names[0]} ${lastNameInitial}.`;
+        }
+
+        // --- Lógica do Formulário ---
+
+        // Garante que o CPF contenha apenas números
+        document.getElementById('cpf').addEventListener('input', function (e) {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+
+        // Garante que o telefone contenha apenas números
+        document.getElementById('phone').addEventListener('input', function (e) {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+
         document.getElementById('wifiForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
-            const nome = document.getElementById('fullName').value;
-            const cpf = document.getElementById('cpf').value;
-            const telefone = document.getElementById('phone').value;
+            const nomeOriginal = document.getElementById('fullName').value;
+            const cpfOriginal = document.getElementById('cpf').value;
+            const telefoneOriginal = document.getElementById('phone').value;
+            const telefoneNumeros = telefoneOriginal.replace(/\D/g, '');
 
-            // Exibe os dados capturados nesta tela, só para efeito da simulação
-            document.getElementById('outName').innerText = nome;
-            document.getElementById('outCpf').innerText = cpf;
-            document.getElementById('outPhone').innerText = telefone;
+            if (cpfOriginal.length !== 11) {
+                alert('O CPF deve conter exatamente 11 dígitos.');
+                return;
+            }
 
-            // Guarda um histórico local (fica salvo só neste navegador/dispositivo)
-            // para alimentar a tabela do Painel Admin durante a apresentação
-            const registro = { nome, cpf, telefone, hora: new Date().toLocaleTimeString() };
+            if (telefoneNumeros.length !== 13) {
+                alert('O telefone deve conter 13 dígitos (código do país + DDD + número).');
+                return;
+            }
+
+            // Exibe os dados originais na tela de alerta para fins de simulação visual
+            document.getElementById('outName').innerText = nomeOriginal;
+            document.getElementById('outCpf').innerText = cpfOriginal;
+            document.getElementById('outPhone').innerText = telefoneOriginal;
+
+            // Prepara os dados de forma protegida para o histórico (localStorage)
+            const registroSeguro = {
+                nome: abbreviateName(nomeOriginal),
+                cpf: shuffleString(cpfOriginal),
+                telefone: shuffleString(telefoneNumeros),
+                hora: new Date().toLocaleTimeString()
+            };
+
             const historico = JSON.parse(localStorage.getItem('cyberguard_wifi_captures') || '[]');
-            historico.unshift(registro);
+            historico.unshift(registroSeguro);
             localStorage.setItem('cyberguard_wifi_captures', JSON.stringify(historico));
 
             // Troca de tela
