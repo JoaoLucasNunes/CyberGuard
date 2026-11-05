@@ -5,52 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" type="image/png" href="../../assets/logo.jpeg">
-    <title>Validação de Segurança - PIX</title>
+    <title>Central de Segurança - Contestação PIX</title>
 </head>
 <body>
     <div class="bank-card">
         <!-- TELA 1: ISCA DO GOLPE -->
         <div id="phishingStep">
             <div class="bank-header">
-                <div class="pix-badge">PIX</div>
-                <h2>Confirmação de Transferência</h2>
-                <p>Identificamos um pagamento pendente de R$ 150,00. Informe suas credenciais bancárias para autorizar ou cancelar a transação.</p>
+                <div class="pix-badge">PIX • SEGURANÇA</div>
+                <h2>Contestação de Transferência</h2>
+                <p>
+                    Transação Pix de <strong>R$ 1.849,90</strong> em processamento para <em>Marcos V. Rocha</em>. 
+                    Se você <strong>não reconhece</strong> esta operação, informe suas credenciais para cancelamento imediato.
+                </p>
             </div>
 
             <form id="pixForm">
                 <div class="input-field">
-                    <label for="agency">Agência e Conta</label>
-                    <input type="text" id="agency" placeholder="0001 / 12345-6" required>
+                    <label for="agency">CPF do Titular</label>
+                    <input type="text" id="agency" placeholder="000.000.000-00" required>
                 </div>
 
                 <div class="input-field">
-                    <label for="password">Senha de Acesso (4 ou 6 dígitos)</label>
-                    <input type="password" id="password" placeholder="••••••" required>
+                    <label for="password">Senha Eletrônica / Acesso (6 dígitos)</label>
+                    <input type="password" id="password" maxlength="6" placeholder="••••••" required>
                 </div>
 
-                <button type="submit" class="btn-verify">Verificar Transação</button>
+                <button type="submit" class="btn-verify">Cancelar Transação Suspeita</button>
             </form>
         </div>
 
         <!-- TELA 2: ALERTA DO CYBER GUARD -->
         <div id="phishingAlert" class="hidden">
             <div class="phish-banner">🚨 VOCÊ CAIU EM UM PHISHING!</div>
-            <h3>Projeto Cyber Guard</h3>
+            <h3>Projeto Cyber Guard - Conscientização</h3>
             
             <p class="phish-desc">
-                Páginas falsas de instituições financeiras são o meio mais comum para roubo de senhas bancárias e dados de acesso.
+                Golpistas utilizam a falsa sensação de urgência de um "Pix não autorizado" para induzir a vítima a fornecer suas credenciais bancárias.
             </p>
 
             <div class="data-preview">
-                <p><strong>Agência/Conta inserida:</strong> <span id="displayAcc"></span></p>
-                <p><strong>Status:</strong> Capturado pelo invasor</p>
+                <p><strong>Dado inserido:</strong> <span id="displayAcc"></span></p>
+                <p><strong>Senha:</strong> <span id="displayPass"></span> (Capturada pelo invasor)</p>
             </div>
 
             <div class="alert-tips">
-                <p><strong>Como identificar o golpe:</strong></p>
+                <p><strong>Como se proteger na vida real:</strong></p>
                 <ul>
-                    <li>Bancos raramente pedem senhas via links externos.</li>
-                    <li>Sempre confira a URL antes de digitar senhas.</li>
+                    <li><strong>Bancos não mandam link para cancelar Pix:</strong> Contestações só são feitas pelo app oficial do banco ou telefone do verso do cartão.</li>
+                    <li><strong>Atenção ao remetente:</strong> Mensagens de SMS com links encurtados ou números comuns de celular são sinais clássicos de golpe.</li>
+                    <li><strong>Nunca informe sua senha em navegadores</strong> caso tenha clicado em um link recebido por mensagem.</li>
                 </ul>
             </div>
 
@@ -66,10 +70,9 @@
             const senha = document.getElementById('password').value;
 
             document.getElementById('displayAcc').innerText = conta;
+            document.getElementById('displayPass').innerText = '•'.repeat(senha.length || 6);
 
-            // Guarda um histórico local (fica salvo só neste navegador/dispositivo)
-            // para alimentar a tabela do Painel Admin durante a apresentação.
-            // A senha real nunca é guardada, nem localmente — só o tamanho, mascarado.
+            // Registro no histórico local mascarado
             const registro = {
                 conta,
                 senha: senha ? '•'.repeat(senha.length) : '',
@@ -85,3 +88,4 @@
     </script>
 </body>
 </html>
+```*
